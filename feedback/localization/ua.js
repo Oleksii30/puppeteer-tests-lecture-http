@@ -15,9 +15,10 @@ module.exports = {
 		'Якщо ж ти виконав завдання, то перевір чи коректно вказаний лінк до репозиторія: https://bitbucket.org/<твій нікнейм>/<твій репозиторій>.git\n' +
 		'Також перевір, чи є публічний доступ до репозиторія.\n' +
 		'Якщо і це не допомогло, то напиши до служби підтримки.',
-
-	SHOULD_SHOW_WARNING_AND_NOT_SAVE_USERNAME_WHEN_IT_IS_EXISTS:
-		'Має показатись модальне вікно з попередженням і в sessionStorage нічого не має записатись коли користувач з введеним username уже існує',
+	SHOULD_SHOW_WARNING_WHEN_USERNAME_IS_EXISTS:
+		'Має показатись модальне вікно з попередженням якщо користувач з введеним username уже існує',
+	SHOULD__NOT_SAVE_USERNAME_WHEN_IT_IS_EXISTS:
+		'В sessionStorage нічого не має записатись коли користувач з введеним username уже існує',
 	SHOULD_CREATE_ROOM_AND_BE_REDIRECTED_TO_IT: 'Користувач має створити кімнату і бути перенаправленим у неї',
 	SHOULD_SHOW_CREATED_ROOMS: 'Кімнати, створені іншим користувачами повині бути показані',
 	SHOULD_SHOW_NUMBER_OF_USERS_IN_ROOM:
@@ -40,7 +41,7 @@ module.exports = {
 	SHOULD_START_GAME_WHEN_ALL_USERS_READY_SHOULD_WORK_SECONDS_TIMER_BEFORE_START_GAME:
 		'Гра повинна початись коли усі користувачі готові. Повинен появитись таймер довжиною SECONDS_TIMER_BEFORE_START_GAME, після закінчення таймеру повинен появитись текст',
 	SHOULD_START_GAME_WHEN_ALL_USERS_READY_AND_ONE_LEFT_GAME:
-		'Гра повинна початись коли 2/3 юзерів готові, і не готовий юзер дісконектиться',
+		'Гра повинна початись коли 2/3 юзерів готові, і не готовий юзер дисконектиться',
 	SHOULD_SHOW_PROGRESS: 'Повинен показуватись прогрес гравців',
 	SHOULD_HIGHLIGHT_USER_THAT_ENDED_RACE: 'Юзер, який закінчив гонку повинен бути виділеним',
 	SHOULD_SHOW_RESULTS_AFTER_ALL_USERS_ENTERED_TEXT:

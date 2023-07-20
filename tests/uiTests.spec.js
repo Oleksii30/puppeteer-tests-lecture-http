@@ -76,7 +76,7 @@ describe('Test UI', () => {
 		server?.close();
 	});
 
-	it('SHOULD_SHOW_WARNING_AND_NOT_SAVE_USERNAME_WHEN_IT_IS_EXISTS', async function () {
+	it('SHOULD_SHOW_WARNING_WHEN_USERNAME_IS_EXISTS', async function () {
 		this.timeout(11000);
 		await initBrowsers(2);
 		const username = 'username-test';
@@ -87,6 +87,17 @@ describe('Test UI', () => {
 		await sleep(200);
 
 		await checkMessageModalShown(page2);
+	});
+
+	it('SHOULD__NOT_SAVE_USERNAME_WHEN_IT_IS_EXISTS', async function () {
+		this.timeout(11000);
+		await initBrowsers(2);
+		const username = 'username-test';
+
+		const page1 = await startAndLogIn(browsers[0], username);
+		const page2 = await startAndLogIn(browsers[1], username);
+
+		await sleep(200);
 
 		const usernameFromSessionStorage = await page1.evaluate(() => window.sessionStorage.username);
 		const usernameFromSessionStorage1 = await page2.evaluate(() => window.sessionStorage.username);
@@ -262,14 +273,14 @@ describe('Test UI', () => {
 		await createRoom(page1, roomName);
 		await checkIsInRoom(page1);
 
-		const [page2, page3, page4] = await Promise.all([
-			startAndLogIn(browsers[1], username2),
-			startAndLogIn(browsers[2], username3),
-			startAndLogIn(browsers[3], username4),
-		]);
+		await startAndLogIn(browsers[1], username2);
+		await startAndLogIn(browsers[2], username3);
+		await startAndLogIn(browsers[3], username4);
 
-		await Promise.all([joinRoom(page2), joinRoom(page3)]);
-		await Promise.all([checkIsInRoom(page2), checkIsInRoom(page3)]);
+		await joinRoom(page2);
+		await joinRoom(page3);
+		await checkIsInRoom(page2);
+		await checkIsInRoom(page3)
 
 		await checkNoRoomShown(page4);
 	});
@@ -412,38 +423,51 @@ describe('Test UI', () => {
 		await pressReadyButton(page1);
 		await pressReadyButton(page2);
 
-		await Promise.all([checkTimerAppeared(page1), checkTimerAppeared(page2)]);
-		await Promise.all([checkTextDoesNotExists(page1), checkTextDoesNotExists(page2)]);
-		await Promise.all([checkReadyButtonDoesNotExists(page1), checkReadyButtonDoesNotExists(page2)]);
-		await Promise.all([checkTextToAppear(page1), checkTextToAppear(page2)]);
-		await Promise.all([checkTimerDoesNotExists(page1), checkTimerDoesNotExists(page2)]);
-		await Promise.all([checkQuitRoomDoesNotExists(page1), checkQuitRoomDoesNotExists(page2)]);
+		await checkTimerAppeared(page1);
+		await checkTimerAppeared(page2);
+		await checkTextDoesNotExists(page1);
+		await checkTextDoesNotExists(page2);
+		await checkReadyButtonDoesNotExists(page1);
+		await checkReadyButtonDoesNotExists(page2);
+		await checkTextToAppear(page1);
+		await checkTextToAppear(page2);
+		await checkTimerDoesNotExists(page1);
+		await checkTimerDoesNotExists(page2);
+		await checkQuitRoomDoesNotExists(page1);
+		await checkQuitRoomDoesNotExists(page2);
+
 	});
 
 	it('SHOULD_START_GAME_WHEN_ALL_USERS_READY_AND_ONE_LEFT_GAME', async function () {
 		this.timeout(28000);
 		await initBrowsers(3);
 
-		const [page1, page2, page3] = await Promise.all([
-			startAndLogIn(browsers[0], 'user1'),
-			startAndLogIn(browsers[1], 'user2'),
-			startAndLogIn(browsers[2], 'user3'),
-		]);
+		const page1 = await startAndLogIn(browsers[0], 'user1');
+		const page2 = await startAndLogIn(browsers[1], 'user2');
+		const page3 = await startAndLogIn(browsers[2], 'user3');
 
 		await createRoom(page1, 'room1');
-		await Promise.all([joinRoom(page2), joinRoom(page3)]);
+		await joinRoom(page2);
+		await joinRoom(page3);
 
 		await pressReadyButton(page1);
 		await pressReadyButton(page2);
 
 		await quitRoom(page3);
 
-		await Promise.all([checkTimerAppeared(page1), checkTimerAppeared(page2)]);
-		await Promise.all([checkTextDoesNotExists(page1), checkTextDoesNotExists(page2)]);
-		await Promise.all([checkReadyButtonDoesNotExists(page1), checkReadyButtonDoesNotExists(page2)]);
-		await Promise.all([checkTextToAppear(page1), checkTextToAppear(page2)]);
-		await Promise.all([checkTimerDoesNotExists(page1), checkTimerDoesNotExists(page2)]);
-		await Promise.all([checkQuitRoomDoesNotExists(page1), checkQuitRoomDoesNotExists(page2)]);
+		await checkTimerAppeared(page1);
+		await checkTimerAppeared(page2);
+		await checkTextDoesNotExists(page1);
+		await checkTextDoesNotExists(page2);
+		await checkReadyButtonDoesNotExists(page1);
+		await checkReadyButtonDoesNotExists(page2);
+		await checkTextToAppear(page1);
+		await checkTextToAppear(page2);
+		await checkTimerDoesNotExists(page1);
+		await checkTimerDoesNotExists(page2);
+		await checkQuitRoomDoesNotExists(page1);
+		await checkQuitRoomDoesNotExists(page2);
+
 	});
 
 	it('SHOULD_SHOW_PROGRESS', async function () {
@@ -454,8 +478,8 @@ describe('Test UI', () => {
 
 		await pressReadyButton(page1);
 		await pressReadyButton(page2);
-
-		await Promise.all([checkTextToAppear(page1), checkTextToAppear(page2)]);
+		await checkTextToAppear(page1);
+		await checkTextToAppear(page2);
 
 		const page1Text = await getTextToEnter(page1);
 
@@ -477,8 +501,10 @@ describe('Test UI', () => {
 
 		const { page1, page2 } = await createTwoUsersInSameRoom({ browser1: browsers[0], browser2: browsers[1] });
 
-		await Promise.all([pressReadyButton(page1), pressReadyButton(page2)]);
-		await Promise.all([checkTextToAppear(page1), checkTextToAppear(page2)]);
+		await pressReadyButton(page1);
+		await pressReadyButton(page2);
+		await checkTextToAppear(page1);
+		await checkTextToAppear(page2);
 
 		const page1Text = await getTextToEnter(page1);
 		const page2Text = await getTextToEnter(page2);
@@ -497,8 +523,10 @@ describe('Test UI', () => {
 
 		const { page1, page2 } = await createTwoUsersInSameRoom({ browser1: browsers[0], browser2: browsers[1] });
 
-		await Promise.all([pressReadyButton(page1), pressReadyButton(page2)]);
-		await Promise.all([checkTextToAppear(page1), checkTextToAppear(page2)]);
+		await pressReadyButton(page1);
+		await pressReadyButton(page2);
+		await checkTextToAppear(page1);
+		await checkTextToAppear(page2);
 
 		const text = await getTextToEnter(page1);
 		await enterText(page1, text[text.length - 1]);
@@ -506,13 +534,13 @@ describe('Test UI', () => {
 		await enterText(page2, text[text.length - 1]);
 
 		await sleep(200);
-		await Promise.all([checkTextDoesNotExists(page1), checkTextDoesNotExists(page2)]);
-		await Promise.all([
-			checkUserPlace(page1, 'user1', 1),
-			checkUserPlace(page1, 'user2', 2),
-			checkUserPlace(page2, 'user1', 1),
-			checkUserPlace(page2, 'user2', 2),
-		]);
+		await checkTextDoesNotExists(page1);
+		await checkTextDoesNotExists(page2);
+
+		await checkUserPlace(page1, 'user1', 1);
+		await checkUserPlace(page1, 'user2', 2);
+		await checkUserPlace(page2, 'user1', 1);
+		await checkUserPlace(page2, 'user2', 2);
 	});
 
 	it('SHOULD_END_GAME_WHEN_ONE_USER_DISCONNECTS_AND_OTHER_ENTERED_TEXT', async function () {
@@ -524,8 +552,12 @@ describe('Test UI', () => {
 		await joinRoom(page3);
 		await sleep(300);
 
-		await Promise.all([pressReadyButton(page1), pressReadyButton(page2), pressReadyButton(page3)]);
-		await Promise.all([checkTextToAppear(page1), checkTextToAppear(page2), checkTextToAppear(page3)]);
+		await pressReadyButton(page1);
+		await pressReadyButton(page2);
+		await pressReadyButton(page3);
+		await checkTextToAppear(page1);
+		await checkTextToAppear(page2);
+		await checkTextToAppear(page3);
 
 		const text = await getTextToEnter(page1);
 		await enterText(page1, text[text.length - 1]);
@@ -535,13 +567,11 @@ describe('Test UI', () => {
 		await page3.close();
 
 		await sleep(200);
-		await Promise.all([
-			checkUserPlace(page1, 'user1', 1),
-			checkUserPlace(page1, 'user2', 2),
-			checkUserPlace(page2, 'user1', 1),
-			checkUserPlace(page2, 'user2', 2),
-		]);
-		await Promise.all([checkTextDoesNotExists(page1), checkTextDoesNotExists(page2)]);
+
+		await checkUserPlace(page1, 'user1', 1);
+		await checkUserPlace(page1, 'user2', 2);
+		await checkUserPlace(page2, 'user1', 1);
+		await checkUserPlace(page2, 'user2', 2);
 	});
 
 	it('SHOULD_END_GAME_WHEN_TIMER_ENDED_SECONDS_FOR_GAME', async function () {
@@ -550,8 +580,10 @@ describe('Test UI', () => {
 
 		const { page1, page2 } = await createTwoUsersInSameRoom({ browser1: browsers[0], browser2: browsers[1] });
 
-		await Promise.all([pressReadyButton(page1), pressReadyButton(page2)]);
-		await Promise.all([checkTextToAppear(page1), checkTextToAppear(page2)]);
+		await pressReadyButton(page1);
+		await pressReadyButton(page2);
+		await checkTextToAppear(page1);
+		await checkTextToAppear(page2);
 
 		const text = await getTextToEnter(page1);
 		await enterText(page1, text[text.length - 1]);
@@ -559,13 +591,10 @@ describe('Test UI', () => {
 
 		await sleep(SECONDS_FOR_GAME * 1000);
 
-		await Promise.all([checkTextDoesNotExists(page1), checkTextDoesNotExists(page2)]);
-		await Promise.all([
-			checkUserPlace(page1, 'user1', 1),
-			checkUserPlace(page1, 'user2', 2),
-			checkUserPlace(page2, 'user1', 1),
-			checkUserPlace(page2, 'user2', 2),
-		]);
+		await checkUserPlace(page1, 'user1', 1);
+		await checkUserPlace(page1, 'user2', 2);
+		await checkUserPlace(page2, 'user1', 1);
+		await checkUserPlace(page2, 'user2', 2);
 	});
 
 	it('SHOULD_CLEAR_AFTER_END_GAME', async function () {
@@ -574,8 +603,10 @@ describe('Test UI', () => {
 
 		const { page1, page2 } = await createTwoUsersInSameRoom({ browser1: browsers[0], browser2: browsers[1] });
 
-		await Promise.all([pressReadyButton(page1), pressReadyButton(page2)]);
-		await Promise.all([checkTextToAppear(page1), checkTextToAppear(page2)]);
+		await pressReadyButton(page1);
+		await pressReadyButton(page2);
+		await checkTextToAppear(page1);
+		await checkTextToAppear(page2);
 
 		const text = await getTextToEnter(page1);
 		await enterText(page1, text[text.length - 1]);
@@ -586,9 +617,12 @@ describe('Test UI', () => {
 		await closeResultsModal(page2);
 
 		await sleep(200);
-		await Promise.all([checkReadyButtonToAppear(page1), checkReadyButtonToAppear(page2)]);
-		await Promise.all([checkQuitRoomToAppear(page1), checkQuitRoomToAppear(page2)]);
-		await Promise.all([checkNoReadyUser(page1), checkNoReadyUser(page2)]);
+		await checkReadyButtonToAppear(page1);
+		await checkReadyButtonToAppear(page2);
+		await checkQuitRoomToAppear(page1);
+		await checkQuitRoomToAppear(page2);
+		await checkNoReadyUser(page1);
+		await checkNoReadyUser(page2);
 	});
 
 	it('SHOULD_MAKE_HTTP_REQUEST_TO_GET_TEXT', function (done) {
@@ -609,9 +643,9 @@ describe('Test UI', () => {
 						done(error);
 					}
 				});
-
-				await Promise.all([pressReadyButton(page1), pressReadyButton(page2)]);
+				await pressReadyButton(page1);
+				await pressReadyButton(page2);
 			})
 			.catch(error => done(error));
 	});
-});
+ });

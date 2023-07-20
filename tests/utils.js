@@ -232,6 +232,6 @@ export const getRooms = (page) => {
     return page.$$eval(`.room`, nodes => nodes.map(node => node.dataset.roomName));
 }
 
-export const getRoomName = (page) => {
-    return page.$eval('#room-name', node => node.innerText)
+export const getRoomName = async (page) => {
+  return page.$eval('#room-name', node => node.innerText)
 }

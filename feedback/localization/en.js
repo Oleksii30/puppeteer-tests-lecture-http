@@ -16,8 +16,10 @@ module.exports = {
 		'Also check if there is public access to the repository\n' +
 		'If this does not help, then write to support.',
 
-	SHOULD_SHOW_WARNING_AND_NOT_SAVE_USERNAME_WHEN_IT_IS_EXISTS:
-		'A modal window should appear and nothing should be written in sessionStorage when a user with a username already exists',
+	SHOULD_SHOW_WARNING_WHEN_USERNAME_IS_EXISTS:
+		'A modal window should appear when a user with a username already exists',
+	SHOULD__NOT_SAVE_USERNAME_WHEN_IT_IS_EXISTS:
+		'Nothing should be written in sessionStorage when a user with a username already exists',
 	SHOULD_CREATE_ROOM_AND_BE_REDIRECTED_TO_IT: 'The user must create a room and be redirected to it',
 	SHOULD_SHOW_CREATED_ROOMS: 'Rooms created by other users must be shown',
 	SHOULD_SHOW_NUMBER_OF_USERS_IN_ROOM: 'The number of users in the room should be shown on the rooms list page',
