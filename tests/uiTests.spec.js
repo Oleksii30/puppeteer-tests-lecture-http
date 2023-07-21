@@ -30,6 +30,7 @@ import {
 	getNumberOfUsersInRoom,
 	getRooms,
 	getRoomName,
+	closeUserExistsModal,
 } from './utils';
 
 const puppeteer = require('puppeteer');
@@ -49,7 +50,7 @@ describe('Test UI', () => {
 				.fill(null)
 				.map(() =>
 					puppeteer.launch({
-						headless: true,
+						headless: false,
 						args: [
 							'--no-sandbox',
 							'--disable-setuid-sandbox',
@@ -97,7 +98,11 @@ describe('Test UI', () => {
 		const page1 = await startAndLogIn(browsers[0], username);
 		const page2 = await startAndLogIn(browsers[1], username);
 
-		await sleep(800);
+		await sleep(4000);
+
+		await closeUserExistsModal(page2);
+
+		await sleep(4000);
 
 		const usernameFromSessionStorage = await page1.evaluate(() => window.sessionStorage.username);
 		const usernameFromSessionStorage1 = await page2.evaluate(() => window.sessionStorage.username);

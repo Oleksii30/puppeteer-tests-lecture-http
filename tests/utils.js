@@ -193,6 +193,11 @@ export const closeResultsModal = async page => {
 	await page.click('#quit-results-btn');
 };
 
+export const closeUserExistsModal = async page => {
+	await page.waitForSelector('.submit-btn', { visible: true });
+	await page.click('.submit-btn');
+};
+
 export const checkNoReadyUser = async page => {
 	const readyUsersNumber = (await page.$$eval('.ready-status-green', nodes => nodes)).length;
 
