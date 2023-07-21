@@ -97,7 +97,7 @@ describe('Test UI', () => {
 		const page1 = await startAndLogIn(browsers[0], username);
 		const page2 = await startAndLogIn(browsers[1], username);
 
-		await sleep(200);
+		await sleep(800);
 
 		const usernameFromSessionStorage = await page1.evaluate(() => window.sessionStorage.username);
 		const usernameFromSessionStorage1 = await page2.evaluate(() => window.sessionStorage.username);
